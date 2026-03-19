@@ -1,0 +1,18 @@
+{
+  "logo":"https://i.ibb.co/466791e9/default-logo.png",
+  "banner":"https://i.ibb.co/4b607af0/banner.png",
+  "founder":{"photo":"https://i.ibb.co/founder.png","name":"Happy Nayak","text":"Founder - Keep grinding!","instagram":"https://instagram.com/happynayak"},
+  "ceo":{"photo":"https://i.ibb.co/ceo.png","name":"Samir Das","text":"CEO - Lead with vision!","instagram":"https://instagram.com/samirdas"},
+  "cofounder":{"photo":"https://i.ibb.co/cofounder.png","name":"Prem Das","text":"Co-Founder - Stay consistent!","instagram":"https://instagram.com/premdas"},
+  "officialInstagram":"https://instagram.com/officialcompany",
+  "youtubeLive":"https://www.youtube.com/embed/live_stream?channel=YOUR_CHANNEL_ID",
+  "qrCode":"https://i.ibb.co/qr.png",
+  "whatsappNumber":"918984072080",
+  "rewards":{"solo":{"19":29,"29":39,"39":49,"49":59},"duo":{"69":89,"89":111,"139":200},"squad":{"199":299,"299":500,"399":700,"499":800}},
+  "leaderboard":[
+    {"name":"Player1","mode":"Solo","wins":5,"losses":2},
+    {"name":"TeamA","mode":"Duo","wins":3,"losses":1},
+    {"name":"SquadX","mode":"Squad","wins":4,"losses":2}
+  ],
+  "currentMatches":{"solo":"Player1 vs Player2","duo":"TeamA vs TeamB","squad":"SquadX vs SquadY"}
+}

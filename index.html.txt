@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Indian eSports - Free Fire Tournament</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <style>
+    body{margin:0;font-family:Arial;background:#0f0f0f;color:gold;text-align:center;}
+    header{background:linear-gradient(90deg,#b8860b,#ff4500);padding:20px;color:white;font-size:28px;font-weight:bold;display:flex;justify-content:center;align-items:center;text-shadow:1px 1px black;}
+    header img{height:50px;margin-right:15px;}
+    .banner{width:100%;max-height:250px;margin-bottom:20px;object-fit:cover;}
+    .photos{display:flex;justify-content:center;margin-bottom:20px;gap:20px;}
+    .photos div{text-align:center;color:gold;}
+    .photos img{width:120px;height:120px;border-radius:50%;border:3px solid gold;object-fit:cover;}
+    .photos a{display:block;color:#ffcc00;font-size:14px;text-decoration:none;margin:2px 0;}
+    .container{max-width:900px;margin:0 auto 30px auto;padding:20px;background:#1a1a1a;border-radius:10px;box-shadow:0 0 15px gold;}
+    h2{color:#ffcc00;margin-bottom:10px;}
+    select,p{font-size:18px;margin:10px 0;padding:8px;width:50%;}
+    .register-btn,.whatsapp-btn,.youtube-btn,.pay-btn,.admin-btn{padding:15px 30px;background:red;color:white;font-size:18px;border:none;border-radius:5px;cursor:pointer;margin-top:20px;text-decoration:none;display:inline-block;}
+    .register-btn:hover,.whatsapp-btn:hover,.youtube-btn:hover,.pay-btn:hover,.admin-btn:hover{background:darkred;}
+    #whatsapp,#qrSection,#adminPanel{display:none;margin-top:20px;}
+    .leaderboard{max-width:900px;margin:30px auto;padding:20px;background:#1a1a1a;border-radius:10px;box-shadow:0 0 15px gold;}
+    table{width:100%;border-collapse:collapse;color:gold;}
+    th,td{border:1px solid gold;padding:10px;text-align:center;}
+    th{background:red;}
+    .highlight-gold{background:gold;color:black;font-weight:bold;}
+    .highlight-silver{background:silver;color:black;font-weight:bold;}
+    .highlight-bronze{background:#cd7f32;color:black;font-weight:bold;}
+    .photos input,.adminPanelSection input,.adminPanelSection select,.adminPanelSection textarea{width:80%;margin:5px 0;padding:5px;}
+    .adminPanelSection{background:#222;padding:15px;margin:10px 0;border-radius:8px;}
+    .countdown{font-size:20px;color:red;margin:10px 0;}
+    .live-section{margin:20px 0;}
+    .current-match{margin:20px auto;background:#1a1a1a;padding:15px;border-radius:10px;box-shadow:0 0 10px gold;}
+    @media(max-width:600px){select,p{width:80%;}.photos{flex-direction:column;gap:10px;}.photos img{width:120px;height:120px;}header{flex-direction:column;}header img{margin:0 0 10px 0;}}
+  </style>
+</head>
+<body>
+
+<header>
+  <img id="logo" src="" alt="Logo">
+  Indian eSports - Free Fire Tournament
+  <a id="officialInstagram" href="#" target="_blank" style="margin-left:20px;color:#ffcc00;font-size:18px;text-decoration:none;">Official Instagram</a>
+</header>
+
+<img class="banner" id="bannerImg" src="" alt="Tournament Banner">
+
+<div class="photos">
+  <div>
+    <img id="founderPhoto" src="" alt="Happy Nayak">
+    <p id="founderName">Happy Nayak<br>Founder</p>
+    <span id="founderText"></span>
+    <a id="founderIG" href="#" target="_blank">Instagram</a>
+  </div>
+  <div>
+    <img id="ceoPhoto" src="" alt="Samir Das">
+    <p id="ceoName">Samir Das<br>CEO</p>
+    <span id="ceoText"></span>
+    <a id="ceoIG" href="#" target="_blank">Instagram</a>
+  </div>
+  <div>
+    <img id="cofounderPhoto" src="" alt="Prem Das">
+    <p id="cofounderName">Prem Das<br>Co-Founder</p>
+    <span id="cofounderText"></span>
+    <a id="cofounderIG" href="#" target="_blank">Instagram</a>
+  </div>
+</div>
+
+<div class="countdown" id="countdown">Next tournament starts in: -- : -- : -- : --</div>
+
+<div class="live-section">
+  <h2>Live Match</h2>
+  <iframe id="youtubeLive" width="560" height="315" src="" frameborder="0" allowfullscreen></iframe>
+</div>
+
+<div class="container">
+  <h2>Select Mode & Entry</h2>
+  
+  <select id="modeSelect">
+    <option value="">Select Mode</option>
+    <option value="solo">Solo</option>
+    <option value="duo">Duo</option>
+    <option value="squad">Squad</option>
+  </select>
+
+  <select id="entrySelect">
+    <option value="">Select Entry Price</option>
+  </select>
+
+  <select id="dateSelect">
+    <option value="">Select Date</option>
+    <option value="2026-03-25">25 March 2026</option>
+    <option value="2026-03-28">28 March 2026</option>
+    <option value="2026-03-31">31 March 2026</option>
+  </select>
+
+  <p id="rewardDisplay">Reward: -</p>
+
+  <button class="pay-btn" id="payNowBtn">Pay Now / QR Code</button>
+
+  <div id="qrSection">
+    <h3>Scan QR to Pay</h3>
+    <img id="qrImg" src="" alt="Payment QR" style="width:200px;height:200px;">
+  </div>
+
+  <div id="whatsapp">
+    <a href="" target="_blank" class="whatsapp-btn">Confirm Payment on WhatsApp</a>
+  </div>
+  
+  <button class="admin-btn" id="adminToggle">Admin Panel</button>
+</div>
+
+<div id="adminPanel">
+  <h2 style="color:#ffcc00;">Admin Panel</h2>
+  <div class="adminPanelSection">
+    <h3>Login</h3>
+    <input type="password" id="adminPassword" placeholder="Enter password">
+    <button id="loginBtn">Login</button>
+    <p id="loginMsg"></p>
+  </div>
+  
+  <div id="adminControls" style="display:none;">
+    <div class="adminPanelSection">
+      <h3>Update Images / QR</h3>
+      Banner URL: <input type="text" id="bannerURL"><br>
+      Logo URL: <input type="text" id="logoURL"><br>
+      Founder Photo URL: <input type="text" id="founderPhotoURL"><br>
+      CEO Photo URL: <input type="text" id="ceoPhotoURL"><br>
+      Co-Founder Photo URL: <input type="text" id="cofounderPhotoURL"><br>
+      QR Code URL: <input type="text" id="qrURL"><br>
+      <button id="saveImagesBtn">Save</button>
+    </div>
+    
+    <div class="adminPanelSection">
+      <h3>Leaderboard</h3>
+      <textarea id="leaderboardInput" rows="5" placeholder='JSON format [{"name":"Player1","mode":"Solo","wins":5,"losses":2}]'></textarea><br>
+      <button id="saveLeaderboardBtn">Save Leaderboard</button>
+    </div>
+    
+    <div class="adminPanelSection">
+      <h3>Links</h3>
+      Official Instagram: <input type="text" id="officialInstagramInput"><br>
+      YouTube Live Embed: <input type="text" id="youtubeInput"><br>
+      WhatsApp Number: <input type="text" id="whatsappInput"><br>
+      <button id="saveLinksBtn">Save Links</button>
+    </div>
+    
+    <div class="adminPanelSection">
+      <h3>Leaderboard / Matches Demo JSON</h3>
+      <p>Leaderboard and current matches can be added in JSON format.</p>
+    </div>
+  </div>
+</div>
+
+<div class="current-match" id="currentMatches">
+  <h2>Ongoing Matches</h2>
+  <div id="soloMatch"></div>
+  <div id="duoMatch"></div>
+  <div id="squadMatch"></div>
+</div>
+
+<div class="leaderboard">
+  <h2>Leaderboard</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Player / Team</th>
+        <th>Mode</th>
+        <th>Wins</th>
+        <th>Losses</th>
+      </tr>
+    </thead>
+    <tbody id="leaderboardBody"></tbody>
+  </table>
+</div>
+
+<script>
+  // 🔹 Firebase Config (replace with your project)
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID",
+    databaseURL:"https://YOUR_PROJECT.firebaseio.com"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  // Elements
+  const logo=document.getElementById("logo"), bannerImg=document.getElementById("bannerImg"),
+        founderPhoto=document.getElementById("founderPhoto"), founderText=document.getElementById("founderText"),
+        founderIG=document.getElementById("founderIG"), ceoPhoto=document.getElementById("ceoPhoto"),
+        ceoText=document.getElementById("ceoText"), ceoIG=document.getElementById("ceoIG"),
+        cofounderPhoto=document.getElementById("cofounderPhoto"), cofounderText=document.getElementById("cofounderText"),
+        cofounderIG=document.getElementById("cofounderIG"), officialInstagram=document.getElementById("officialInstagram"),
+        youtubeLive=document.getElementById("youtubeLive"), qrImg=document.getElementById("qrImg"),
+        whatsappBtn=document.querySelector(".whatsapp-btn"), modeSelect=document.getElementById("modeSelect"),
+        entrySelect=document.getElementById("entrySelect"), rewardDisplay=document.getElementById("rewardDisplay"),
+        payNowBtn=document.getElementById("payNowBtn"), qrSection=document.getElementById("qrSection"),
+        whatsappDiv=document.getElementById("whatsapp"), leaderboardBody=document.getElementById("leaderboardBody"),
+        soloMatch=document.getElementById("soloMatch"), duoMatch=document.getElementById("duoMatch"),
+        squadMatch=document.getElementById("squadMatch");
+
+  const adminToggle=document.getElementById("adminToggle"), adminPanel=document.getElementById("adminPanel"),
+        loginBtn=document.getElementById("loginBtn"), adminPasswordInput=document.getElementById("adminPassword"),
+        loginMsg=document.getElementById("loginMsg"), adminControls=document.getElementById("adminControls");
+
+  let rewards = {"solo":{"19":29,"29":39,"39":49,"49":59},"duo":{"69":89,"89":111,"139":200},"squad":{"199":299,"299":500,"399":700,"499":800}};
+
+  // Admin Panel Toggle
+  adminToggle.addEventListener("click",()=>{adminPanel.style.display=adminPanel.style.display==='none'?'block':'none';});
+
+  // Admin Login
+  loginBtn.addEventListener("click",()=>{
+    const pass=adminPasswordInput.value;
+    if(pass==="12345"){ // simple password
+      loginMsg.textContent="Login successful!";
+      adminControls.style.display="block";
+    }else loginMsg.textContent="Incorrect password!";
+  });
+
+  // Populate Entry based on Mode
+  modeSelect.addEventListener("change",function(){
+    const mode=modeSelect.value;
+    entrySelect.innerHTML='<option value="">Select Entry Price</option>';
+    rewardDisplay.textContent="Reward: -";
+    if(mode && rewards[mode]){
+      Object.keys(rewards[mode]).forEach(entry=>{
+        const option=document.createElement("option");
+        option.value=entry;
+        option.textContent="₹"+entry;
+        entrySelect.appendChild(option);
+      });
+    }
+  });
+
+  entrySelect.addEventListener("change",function(){
+    const mode=modeSelect.value;
+    const entry=entrySelect.value;
+    if(mode && entry) rewardDisplay.textContent="Reward: ₹"+rewards[mode][entry];
+    else rewardDisplay.textContent="Reward: -";
+  });
+
+  payNowBtn.addEventListener("click",function(){
+    qrSection.style.display="block";
+    setTimeout(()=>{whatsappDiv.style.display="block";},500);
+  });
+
+  // Countdown Timer
+  const countdownEl=document.getElementById("countdown");
+  const tournamentDate=new Date("March 25, 2026 15:00:00").getTime();
+  setInterval(function(){
+    const now=new Date().getTime();
+    const distance=tournamentDate-now;
+    const days=Math.floor(distance/(1000*60*60*24));
+    const hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+    const minutes=Math.floor((distance%(1000*60*60))/(1000*60));
+    const seconds=Math.floor((distance%(1000*60))/1000);
+    countdownEl.innerHTML=`Next tournament starts in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+  },1000);
+
+</script>
+</body>
+</html>
+fetch('data.json')
+.then(res=>res.json())
+.then(data=>{
+  document.getElementById('logo').src = data.logo;
+  document.getElementById('bannerImg').src = data.banner;
+  document.getElementById('founderPhoto').src = data.founder.photo;
+  document.getElementById('founderText').innerText = data.founder.text;
+  document.getElementById('founderIG').href = data.founder.instagram;
+  document.getElementById('ceoPhoto').src = data.ceo.photo;
+  document.getElementById('ceoText').innerText = data.ceo.text;
+  document.getElementById('ceoIG').href = data.ceo.instagram;
+  document.getElementById('cofounderPhoto').src = data.cofounder.photo;
+  document.getElementById('cofounderText').innerText = data.cofounder.text;
+  document.getElementById('cofounderIG').href = data.cofounder.instagram;
+  document.getElementById('officialInstagram').href = data.officialInstagram;
+  document.getElementById('youtubeLive').src = data.youtubeLive;
+  document.getElementById('qrImg').src = data.qrCode;
+  document.querySelector('.whatsapp-btn').href = "https://wa.me/"+data.whatsappNumber;
+});
